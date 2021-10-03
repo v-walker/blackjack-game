@@ -26,7 +26,6 @@ let shuffleArray = (array) => {
 }
 
 let getCard = () => {
-  shuffleArray(deck);
   let card = deck[deck.length-1];
   return card
 }
@@ -47,11 +46,11 @@ let sumPoints = (hand) => {
   let values = []
   hand.forEach(card =>
     values.push(card.value));
-  console.log(values);
+  // console.log(values);
   let sum = values.reduce((accumulator, current) => {
     return accumulator + current;
   }, 0);
-  console.log(sum);
+  // console.log(sum);
   return sum;
 }
 
@@ -61,7 +60,8 @@ let displayPoints = (sum, player) => {
 }
 
 deal.addEventListener('click', (e) => {
-    for (let i = 0; i < 2; i++) {
+  shuffleArray(deck);  
+  for (let i = 0; i < 2; i++) {
         // deal card to player
         playerHandEl.appendChild(makeCardEl(getCard()));
         addCardtoHand(playerArr);
@@ -71,6 +71,7 @@ deal.addEventListener('click', (e) => {
     };
   displayPoints(sumPoints(playerArr), "player");
   displayPoints(sumPoints(dealerArr), "dealer");
+  deal.disabled = true;
 });
 
 // for hit, need to give card to player; if player hand value > 21 after new card, bust
