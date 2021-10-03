@@ -57,6 +57,27 @@ let addCardtoHand = (hand) => {
   hand.push(newCard);
 }
 
+//let's work on getting the value out of playerArr and dealerArr into playerPoints and dealerPoints; 
+// also work on getting that value to display in the window;
+
+let sumPoints = (hand) => {
+  let values = []
+  hand.forEach(card =>
+    values.push(card.value));
+  console.log(values);
+
+  let sum = values.reduce((accumulator, current) => {
+    return accumulator + current;
+  }, 0);
+  console.log(sum);
+  return sum;
+}
+
+let displayPoints = (sum, player) => {
+  let displaySpan = document.querySelector(`#${player}-points`);
+  displaySpan.textContent = sum;
+}
+
 deal.addEventListener('click', (e) => {
   for (let i = 0; i < 2; i++) {
       // deal card to player
@@ -66,9 +87,10 @@ deal.addEventListener('click', (e) => {
       dealerHandEl.appendChild(makeCardEl(getCard()));
       addCardtoHand(dealerArr);
   };
+displayPoints(sumPoints(playerArr), "player");
+displayPoints(sumPoints(dealerArr), "dealer");
 });
 
-//let's work on getting the value out of playerArr and dealerArr into playerPoints and dealerPoints; also work on getting that value to display in the window;
 
 // for hit, need to give card to player; if player hand value > 21 after new card, bust
 

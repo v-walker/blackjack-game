@@ -2,7 +2,7 @@ let deck = [
     {
     suite: 'clubs',
     name: 'ace',
-    value: [1, 11],
+    value: 11,
     image: 'images/ace_of_clubs.png'
     },
     {
@@ -80,7 +80,7 @@ let deck = [
     {
     suite: 'spades',
     name: 'ace',
-    value: [1, 11],
+    value: 11,
     image: 'images/ace_of_spades.png'
     },
     {
@@ -158,7 +158,7 @@ let deck = [
     {
     suite: 'hearts',
     name: 'ace',
-    value: [1, 11],
+    value: 11,
     image: 'images/ace_of_hearts.png'
     },
     {
@@ -236,7 +236,7 @@ let deck = [
     {
     suite: 'diamonds',
     name: 'ace',
-    value: [1, 10],
+    value: 11,
     image: 'images/ace_of_diamonds.png'
     },
     {

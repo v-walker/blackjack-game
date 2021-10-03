@@ -42,6 +42,24 @@ let addCardtoHand = (hand) => {
   hand.push(newCard);
 }
 
+
+let sumPoints = (hand) => {
+  let values = []
+  hand.forEach(card =>
+    values.push(card.value));
+  console.log(values);
+  let sum = values.reduce((accumulator, current) => {
+    return accumulator + current;
+  }, 0);
+  console.log(sum);
+  return sum;
+}
+
+let displayPoints = (sum, player) => {
+  let displaySpan = document.querySelector(`#${player}-points`);
+  displaySpan.textContent = sum;
+}
+
 deal.addEventListener('click', (e) => {
     for (let i = 0; i < 2; i++) {
         // deal card to player
@@ -51,4 +69,23 @@ deal.addEventListener('click', (e) => {
         dealerHandEl.appendChild(makeCardEl(getCard()));
         addCardtoHand(dealerArr);
     };
+  displayPoints(sumPoints(playerArr), "player");
+  displayPoints(sumPoints(dealerArr), "dealer");
 });
+
+// for hit, need to give card to player; if player hand value > 21 after new card, bust
+// check sum and array to determine value of ace --> if ace in array...
+
+hit.addEventListener('click', (e) => {
+  
+})
+
+// need to check value of dealer hand; if dealer hand > 16, dealer stays, else dealer gets new card too
+
+stand.addEventListener('click', (e) => {
+
+})
+
+
+// need win/loss logic/visuals (an alert? a modal(playagain?)?)
+// need to take cards from playerArr and dealerArr and add back to deck & clear the table
