@@ -1,19 +1,20 @@
+// holds cards in DOM
 let dealerHandEl = document.querySelector("#dealer-hand");
-let dealerArr = [];
-let dealerPoints;
 let playerHandEl = document.querySelector("#player-hand");
+// holds dealer's and player's hands of cards (objects) from deck;
+let dealerArr = [];
 let playerArr = [];
-let playerPoints;
 
+// buttons
 let deal = document.querySelector("#deal-button");
 let hit = document.querySelector("#hit-button");
 let stand = document.querySelector("#stand-button");
+let mainMessageDiv = document.querySelector('#messages');
+let playAgain = document.createElement("button");
 
-let getRandom = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max-min) + min);
-}
+playAgain.setAttribute("type", "button");
+playAgain.textContent = "Click me to play again!"
+let textMessageDiv = document.createElement("div");
 
 let shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -23,70 +24,158 @@ let shuffleArray = (array) => {
     array[j] = temp;
   }
   return array;
-}
+};
 
 let getCard = () => {
   let card = deck[deck.length-1];
   return card
-}
+};
 
 let makeCardEl = (card) => {
   let cardEl = document.createElement("img");
   cardEl.setAttribute('src', `${card.image}`);
   return cardEl;
-}
+};
 
 let addCardtoHand = (hand) => {
   let newCard = deck.pop();
   hand.push(newCard);
-}
+};
 
-
-let sumPoints = (hand) => {
+let sumPoints = (hand, user) => {
   let values = []
   hand.forEach(card =>
     values.push(card.value));
-  // console.log(values);
   let sum = values.reduce((accumulator, current) => {
     return accumulator + current;
   }, 0);
-  // console.log(sum);
-  return sum;
-}
+
+  acesInHand = hand.filter((card) => card.name == "ace");
+  if (acesInHand.length == 0) {
+    return sum;
+  }
+  else if (acesInHand.length == 1 && user == "player" && sum > 21) {
+    sum -= 10 * (acesInHand.length);
+    return sum;
+  }
+  else if (acesInHand.length >= 2) {
+    sum -= 10 * (acesInHand.length - 1);
+    return sum;
+  }
+  else {
+    return sum;
+  }
+};
 
 let displayPoints = (sum, player) => {
   let displaySpan = document.querySelector(`#${player}-points`);
   displaySpan.textContent = sum;
+};
+
+let addMessage = () => {
+  mainMessageDiv.appendChild(textMessageDiv);
+  mainMessageDiv.appendChild(playAgain);
+}
+
+let win = () => {
+  textMessageDiv.textContent = "✨ You win! You're a champion! ✨"
+  addMessage();
+  hit.disabled = true;
+  stand.disabled = true;
+}
+
+let lose = () => {
+  textMessageDiv.textContent = "You're a loser. Shame."
+  addMessage();
+  hit.disabled = true;
+  stand.disabled = true;
+}
+
+let tie = () => {
+  textMessageDiv.textContent = "You tied with the dealer, which is basically a loss because if you're not first, you're last. Shame."
+  addMessage();
+  hit.disabled = true;
+  stand.disabled = true;
 }
 
 deal.addEventListener('click', (e) => {
   shuffleArray(deck);  
   for (let i = 0; i < 2; i++) {
-        // deal card to player
-        playerHandEl.appendChild(makeCardEl(getCard()));
-        addCardtoHand(playerArr);
-        // deal card to dealer
-        dealerHandEl.appendChild(makeCardEl(getCard()));
-        addCardtoHand(dealerArr);
+    playerHandEl.appendChild(makeCardEl(getCard()));
+    addCardtoHand(playerArr);
+    dealerHandEl.appendChild(makeCardEl(getCard()));
+    addCardtoHand(dealerArr);
     };
-  displayPoints(sumPoints(playerArr), "player");
-  displayPoints(sumPoints(dealerArr), "dealer");
+  displayPoints(sumPoints(playerArr, "player"), "player");
+  displayPoints(sumPoints(dealerArr, "dealer"), "dealer");
   deal.disabled = true;
+  if (sumPoints(dealerArr, "dealer") === 21 && sumPoints(playerArr, "player") === 21) {
+    tie();
+  }
+  else if (sumPoints(dealerArr, "dealer") === 21) {
+    lose();
+  }
+  else if (sumPoints(playerArr, "player") === 21) {
+    win();
+  }
 });
 
-// for hit, need to give card to player; if player hand value > 21 after new card, bust
-// check sum and array to determine value of ace --> if ace in array...
-
 hit.addEventListener('click', (e) => {
-  
-})
-
-// need to check value of dealer hand; if dealer hand > 16, dealer stays, else dealer gets new card too
+  playerHandEl.appendChild(makeCardEl(getCard()));
+  addCardtoHand(playerArr);
+  let playerSum = sumPoints(playerArr, "player");
+  displayPoints(playerSum, "player");
+  if (playerSum > 21) {
+    lose();
+  }
+  else if (playerSum === 21) {
+    win();
+  }
+});
 
 stand.addEventListener('click', (e) => {
+  hit.disabled = true;
+  stand.disabled = true;
+  // while dealer hand < 17, dealer continues to draw cards...
+  while (sumPoints(dealerArr, "dealer") < 17) {
+    dealerHandEl.appendChild(makeCardEl(getCard()));
+    addCardtoHand(dealerArr);
+    displayPoints(sumPoints(dealerArr, "dealer"), "dealer");
+  }
+  if (sumPoints(dealerArr, "dealer") === 21) {
+    lose();
+  }
+  else if (sumPoints(dealerArr, "dealer") > 21) {
+    win();
+  }
+  else if (sumPoints(dealerArr, "dealer") < 21 && sumPoints(dealerArr, "dealer") > sumPoints(playerArr, "player")) {
+    lose();
+  }
+  else if (sumPoints(dealerArr, "dealer") === sumPoints(playerArr, "player")) {
+    tie();
+  }
+  else if (sumPoints(dealerArr, "dealer") < sumPoints(playerArr, "player")) {
+    win();
+  }
+});
+// when "play again" is clicked, need to take cards from playerArr and dealerArr and add back to deck & clear the table
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+  }
+}
 
-})
-
-
-// need win/loss logic/visuals (an alert? a modal(playagain?)?)
-// need to take cards from playerArr and dealerArr and add back to deck & clear the table
+playAgain.addEventListener('click', (e) => {
+  deal.disabled = false;
+  hit.disabled = false;
+  stand.disabled = false;
+  deck = deck.concat(dealerArr);
+  dealerArr = [];
+  deck = deck.concat(playerArr);
+  playerArr = [];
+  removeAllChildNodes(dealerHandEl);
+  removeAllChildNodes(playerHandEl);
+  removeAllChildNodes(mainMessageDiv);
+  displayPoints(undefined, "dealer");
+  displayPoints(undefined, "player");
+});
