@@ -58,6 +58,9 @@ let sumPoints = (hand, user) => {
     sum -= 10 * (acesInHand.length);
     return sum;
   }
+  else if (acesInHand.length == 1 && user == "dealer" && hand.length > 2) {
+    sum -= 10;
+  }
   else if (acesInHand.length >= 2) {
     sum -= 10 * (acesInHand.length - 1);
     return sum;
@@ -77,11 +80,21 @@ let addMessage = () => {
   mainMessageDiv.appendChild(playAgain);
 }
 
+let wins = 0;
+let losses = 0;
+let winsDisplay = document.querySelector("#win-count");
+winsDisplay.textContent = wins;
+let lossDisplay = document.querySelector("#loss-count");
+lossDisplay.textContent = losses;
+
 let win = () => {
   textMessageDiv.textContent = "✨ 🌈 😎 🚀 🤙 💰 ✨ You win! You're a champion! ✨ 💰 🤙 🚀 😎 🌈 ✨"
   addMessage();
   hit.disabled = true;
   stand.disabled = true;
+  wins += 1;
+  winsDisplay.textContent = wins;
+  return wins;
 }
 
 let lose = () => {
@@ -89,6 +102,9 @@ let lose = () => {
   addMessage();
   hit.disabled = true;
   stand.disabled = true;
+  losses += 1;
+  lossDisplay.textContent = losses;
+  return losses;
 }
 
 let tie = () => {
@@ -126,10 +142,10 @@ hit.addEventListener('click', (e) => {
   let playerSum = sumPoints(playerArr, "player");
   displayPoints(playerSum, "player");
   if (playerSum > 21) {
-    lose();
+    lose(losses);
   }
   else if (playerSum === 21) {
-    win();
+    win(wins);
   }
 });
 
