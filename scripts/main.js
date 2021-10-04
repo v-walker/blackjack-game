@@ -50,6 +50,7 @@ let sumPoints = (hand, user) => {
     return accumulator + current;
   }, 0);
 
+  // ace logic
   acesInHand = hand.filter((card) => card.name == "ace");
   if (acesInHand.length == 0) {
     return sum;
@@ -58,7 +59,7 @@ let sumPoints = (hand, user) => {
     sum -= 10 * (acesInHand.length);
     return sum;
   }
-  else if (acesInHand.length == 1 && user == "dealer" && hand.length > 2) {
+  else if (acesInHand.length == 2 && user == "dealer" && hand.length > 2) {
     sum -= 10;
   }
   else if (acesInHand.length >= 2) {
@@ -70,22 +71,25 @@ let sumPoints = (hand, user) => {
   }
 };
 
+// used to display points from player/dealer in DOM when called by click events
 let displayPoints = (sum, player) => {
   let displaySpan = document.querySelector(`#${player}-points`);
   displaySpan.textContent = sum;
 };
 
-let addMessage = () => {
-  mainMessageDiv.appendChild(textMessageDiv);
-  mainMessageDiv.appendChild(playAgain);
-}
-
+// wins and losses count in DOM
 let wins = 0;
 let losses = 0;
 let winsDisplay = document.querySelector("#win-count");
 winsDisplay.textContent = wins;
 let lossDisplay = document.querySelector("#loss-count");
 lossDisplay.textContent = losses;
+
+// displays message in DOM regarding win, loss, or tie, when called
+let addMessage = () => {
+  mainMessageDiv.appendChild(textMessageDiv);
+  mainMessageDiv.appendChild(playAgain);
+}
 
 let win = () => {
   textMessageDiv.textContent = "✨ 🌈 😎 🚀 🤙 💰 ✨ You win! You're a champion! ✨ 💰 🤙 🚀 😎 🌈 ✨"
@@ -142,10 +146,10 @@ hit.addEventListener('click', (e) => {
   let playerSum = sumPoints(playerArr, "player");
   displayPoints(playerSum, "player");
   if (playerSum > 21) {
-    lose(losses);
+    lose();
   }
   else if (playerSum === 21) {
-    win(wins);
+    win();
   }
 });
 
@@ -174,6 +178,7 @@ stand.addEventListener('click', (e) => {
     win();
   }
 });
+
 // when "play again" is clicked, need to take cards from playerArr and dealerArr and add back to deck & clear the table
 function removeAllChildNodes(parent) {
   while (parent.firstChild) {

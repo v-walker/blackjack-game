@@ -53,11 +53,22 @@ body * {
     box-sizing: inherit;
 }
 
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh
+}
+
+.header-img {
+    height: 100%;
+}
+
 .message-box {
     width: 900px;
     max-width: calc(100% - 20px);
     margin: 0 auto 10px;
-    height: 5em;
+    height: 4.5em;
     font-size: 18px;
     color: white;
     display: flex; 
