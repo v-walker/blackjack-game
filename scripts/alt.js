@@ -78,21 +78,21 @@ let addMessage = () => {
 }
 
 let win = () => {
-  textMessageDiv.textContent = "✨ You win! You're a champion! ✨"
+  textMessageDiv.textContent = "✨ 🌈 😎 🚀 🤙 💰 ✨ You win! You're a champion! ✨ 💰 🤙 🚀 😎 🌈 ✨"
   addMessage();
   hit.disabled = true;
   stand.disabled = true;
 }
 
 let lose = () => {
-  textMessageDiv.textContent = "You're a loser. Shame."
+  textMessageDiv.textContent = "⛔ 📉 👎 💀 You're a loser. Shame.💀 👎 📉 ⛔"
   addMessage();
   hit.disabled = true;
   stand.disabled = true;
 }
 
 let tie = () => {
-  textMessageDiv.textContent = "You tied with the dealer, which is basically a loss because if you're not first, you're last. Shame."
+  textMessageDiv.textContent = "😑 You tied with the dealer, which is basically a loss because if you're not first, you're last. Shame.😑"
   addMessage();
   hit.disabled = true;
   stand.disabled = true;
