@@ -56,11 +56,8 @@ let sumPoints = (hand, user) => {
     return sum;
   }
   else if (acesInHand.length == 1 && user == "player" && sum > 21) {
-    sum -= 10 * (acesInHand.length);
-    return sum;
-  }
-  else if (acesInHand.length == 2 && user == "dealer" && hand.length > 2) {
     sum -= 10;
+    return sum;
   }
   else if (acesInHand.length >= 2) {
     sum -= 10 * (acesInHand.length - 1);
